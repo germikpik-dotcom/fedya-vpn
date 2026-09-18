@@ -1,0 +1,266 @@
+<title>Федя VPN</title>
+<link rel="manifest" href="manifest.json">
+<link rel="apple-touch-icon" href="icon-180.png">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+<meta name="apple-mobile-web-app-title" content="Федя VPN">
+<meta name="theme-color" content="#14152D">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Manrope:wght@500;700;800&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --bg: #0F1024;
+    --panel: #181A38;
+    --panel-2: #1F2247;
+    --accent: #21C7CE;
+    --accent-dim: #16A6B0;
+    --text: #F2F1EC;
+    --text-dim: #A9ABC9;
+    --warn: #E7B04C;
+    --line: rgba(242,241,236,0.10);
+  }
+  @media (prefers-color-scheme: light){
+    :root:not([data-theme="dark"]){
+      --bg: #F4F5FA;
+      --panel: #FFFFFF;
+      --panel-2: #ECEEFA;
+      --accent: #0E8E96;
+      --accent-dim: #0B767D;
+      --text: #14152D;
+      --text-dim: #5B5E80;
+      --warn: #96650F;
+      --line: rgba(20,21,45,0.10);
+    }
+  }
+  :root[data-theme="light"]{
+    --bg: #F4F5FA;
+    --panel: #FFFFFF;
+    --panel-2: #ECEEFA;
+    --accent: #0E8E96;
+    --accent-dim: #0B767D;
+    --text: #14152D;
+    --text-dim: #5B5E80;
+    --warn: #96650F;
+    --line: rgba(20,21,45,0.10);
+  }
+
+  *{box-sizing:border-box}
+  body{
+    background: var(--bg);
+    color: var(--text);
+    font-family: "Inter", -apple-system, "Segoe UI", sans-serif;
+    padding: 0 20px;
+    padding-block: 28px;
+    min-height: 100%;
+  }
+  .wrap{max-width: 480px; margin: 0 auto; display:flex; flex-direction:column; gap:22px;}
+
+  .hero{display:flex; align-items:center; gap:14px;}
+  .hero img{width:56px; height:56px; border-radius:16px; box-shadow:0 6px 20px rgba(0,0,0,0.25);}
+  .hero h1{
+    font-family:"Manrope", sans-serif; font-weight:800; font-size:22px; margin:0;
+    letter-spacing:-0.01em;
+  }
+  .hero p{margin:2px 0 0; font-size:13px; color:var(--text-dim);}
+
+  .card{
+    background: var(--panel);
+    border: 1px solid var(--line);
+    border-radius: 20px;
+    padding: 20px;
+  }
+
+  .connect-card{
+    background: linear-gradient(155deg, var(--panel-2), var(--panel));
+    border: 1px solid var(--line);
+  }
+  .connect-card h2{
+    font-family:"Manrope", sans-serif; font-size:17px; margin:0 0 6px; font-weight:700;
+  }
+  .connect-card p{font-size:13px; color:var(--text-dim); margin:0 0 16px; line-height:1.5;}
+
+  .btn{
+    display:flex; align-items:center; justify-content:center; gap:8px;
+    width:100%; padding:14px 18px; border-radius:14px;
+    font-family:"Manrope", sans-serif; font-weight:700; font-size:15px;
+    border:none; cursor:pointer; text-decoration:none;
+    transition: transform .12s ease, opacity .12s ease;
+  }
+  .btn:active{transform: scale(0.98);}
+  .btn-primary{background: linear-gradient(135deg, var(--accent), var(--accent-dim)); color:#03181A;}
+  .btn-secondary{
+    background: transparent; color: var(--text); border:1px solid var(--line);
+  }
+  .btn[disabled]{opacity:0.5; pointer-events:none;}
+
+  .status{
+    margin-top:12px; font-size:12.5px; color: var(--text-dim);
+    min-height: 16px; line-height:1.5;
+  }
+  .status.show-link code{
+    display:block; margin-top:6px; padding:10px 12px; background: rgba(0,0,0,0.18);
+    border-radius:10px; font-size:11.5px; word-break:break-all; color: var(--accent);
+    border: 1px solid var(--line); user-select:all;
+  }
+  :root[data-theme="light"] .status.show-link code, @media (prefers-color-scheme:light){}
+
+  .steps{display:flex; flex-direction:column; gap:14px;}
+  .steps h3{
+    font-family:"Manrope", sans-serif; font-size:12.5px; text-transform:uppercase;
+    letter-spacing:0.06em; color: var(--text-dim); margin:0 0 4px; font-weight:700;
+  }
+  .platform{
+    display:flex; flex-direction:column; gap:10px; padding:16px;
+    background: var(--panel); border:1px solid var(--line); border-radius:16px;
+  }
+  .platform-head{display:flex; align-items:center; gap:10px;}
+  .platform-icon{
+    width:34px; height:34px; border-radius:10px; display:flex; align-items:center;
+    justify-content:center; background: var(--panel-2); font-size:17px; flex-shrink:0;
+  }
+  .platform-title{font-family:"Manrope", sans-serif; font-weight:700; font-size:14.5px;}
+  .platform ol{margin:0; padding-left:18px; font-size:12.5px; color:var(--text-dim); line-height:1.65;}
+  .platform ol li::marker{color: var(--accent-dim); font-weight:700;}
+
+  .note{
+    font-size:11.5px; color: var(--warn); background: rgba(231,176,76,0.12);
+    border: 1px solid rgba(231,176,76,0.3); border-radius:12px; padding:12px 14px; line-height:1.5;
+  }
+  footer{font-size:11px; color: var(--text-dim); text-align:center; padding-top:4px;}
+</style>
+
+<div class="wrap">
+
+  <div class="hero">
+    <img src="icon-192.png" alt="">
+    <div>
+      <h1>Федя VPN</h1>
+      <p>Личный доступ, выданный ботом «Федя»</p>
+    </div>
+  </div>
+
+  <div class="card connect-card">
+    <h2>Подключиться</h2>
+    <p id="connectHint">На Android ссылка сама откроется в «Феде VPN». На iPhone — скопируется в буфer, и откроется Happ.</p>
+    <button class="btn btn-primary" id="connectBtn">Подключить VPN</button>
+    <div class="status" id="connectStatus"></div>
+    <a class="btn btn-secondary" id="getHappBtn" href="https://apps.apple.com/us/app/happ-proxy-utility/id6504287215" target="_blank" rel="noopener" hidden style="margin-top:10px;">Ещё не поставил Happ? Скачать из App Store</a>
+  </div>
+
+  <div class="steps">
+    <h3>Установить значок «Федя VPN» на экран</h3>
+
+    <div class="platform">
+      <div class="platform-head">
+        <div class="platform-icon">🤖</div>
+        <div class="platform-title">Android · Chrome</div>
+      </div>
+      <ol>
+        <li>Открой эту страницу в Chrome (без магазина приложений).</li>
+        <li>Нажми кнопку ниже — появится системное предложение «Установить».</li>
+        <li>Если кнопка неактивна — открой меню Chrome (⋮) → «Добавить на главный экран».</li>
+      </ol>
+      <button class="btn btn-secondary" id="installAndroidBtn" disabled>Установить приложение</button>
+      <div class="status" id="androidStatus"></div>
+    </div>
+
+    <div class="platform">
+      <div class="platform-head">
+        <div class="platform-icon">🍎</div>
+        <div class="platform-title">iPhone · Safari</div>
+      </div>
+      <ol>
+        <li>В боте «Федя» нажми «Установить на iPhone» — придёт файл‑профиль.</li>
+        <li>Открой полученный файл в чате.</li>
+        <li>Настройки → Профиль загружен → Установить (профиль без подписи, это ожидаемо — просто веб‑ярлык, а не сторонний код).</li>
+      </ol>
+      <div class="status">Файл нельзя раздать прямой ссылкой — iPhone распознаёт профиль только когда получает его как файл, поэтому он приходит через бота.</div>
+    </div>
+  </div>
+
+  <div class="note">
+    Ссылка привязана к твоей общей VPN‑подписке. Не пересылай её и страницу людям, которых не одобрил владелец бота — трафик и лимиты общие на всех.
+  </div>
+
+  <footer>Федя VPN · доступ только по приглашению</footer>
+</div>
+
+<script>
+(function(){
+  try{
+    if('serviceWorker' in navigator){
+      navigator.serviceWorker.register('sw.js').catch(function(){});
+    }
+  }catch(e){}
+
+  var SUB_LINK = "https://panel.fluxvps.one/api/sub/qAzaPbfrAv6peTVy";
+  var connectBtn = document.getElementById('connectBtn');
+  var connectStatus = document.getElementById('connectStatus');
+
+  var isIOS = /iPad|iPhone|iPod/.test(navigator.userAgent);
+  var getHappBtn = document.getElementById('getHappBtn');
+
+  function pokazatSsylku(zagolovok){
+    connectStatus.classList.add('show-link');
+    connectStatus.innerHTML = zagolovok + '<code>' + SUB_LINK + '</code>';
+  }
+
+  connectBtn.addEventListener('click', function(){
+    if(isIOS){
+      getHappBtn.hidden = false;
+      var skopirovano = false;
+      try{
+        if(navigator.clipboard && navigator.clipboard.writeText){
+          navigator.clipboard.writeText(SUB_LINK);
+          skopirovano = true;
+        }
+      }catch(e){}
+      window.location.href = "happ://";
+      pokazatSsylku(
+        (skopirovano ? 'Ссылка скопирована в буфер обмена. ' : '') +
+        'Открой Happ → нажми «+» (Добавить) — он предложит вставить из буфера. Если нет, выбери «Импорт по URL» и вставь эту ссылку вручную:'
+      );
+    } else {
+      var deepLink = "fedyavpn://install-sub?url=" + encodeURIComponent(SUB_LINK);
+      var before = Date.now();
+      window.location.href = deepLink;
+      setTimeout(function(){
+        if(Date.now() - before < 2500){
+          pokazatSsylku('«Федя VPN» не открылась автоматически (возможно, ещё не установлена). Скопируй ссылку и вставь вручную в приложении (Добавить → Импорт по URL):');
+        }
+      }, 1500);
+    }
+  });
+
+  var deferredPrompt = null;
+  var installBtn = document.getElementById('installAndroidBtn');
+  var androidStatus = document.getElementById('androidStatus');
+
+  window.addEventListener('beforeinstallprompt', function(e){
+    e.preventDefault();
+    deferredPrompt = e;
+    installBtn.disabled = false;
+  });
+
+  installBtn.addEventListener('click', function(){
+    if(!deferredPrompt) return;
+    deferredPrompt.prompt();
+    deferredPrompt.userChoice.then(function(choice){
+      androidStatus.textContent = choice.outcome === 'accepted'
+        ? 'Готово, значок добавлен на экран.'
+        : 'Установка отменена. Можно повторить в любой момент.';
+      deferredPrompt = null;
+      installBtn.disabled = true;
+    });
+  });
+
+  window.addEventListener('appinstalled', function(){
+    androidStatus.textContent = 'Готово, значок добавлен на экран.';
+  });
+
+  if(navigator.standalone === true){
+    androidStatus.textContent = installBtn.textContent = '';
+  }
+})();
+</script>
